@@ -21,6 +21,9 @@
     "node": ">=18"
   },
   "overrides": {
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "rpc-websockets": {
+      "uuid": "^9.0.1"
+    }
   }
 }
