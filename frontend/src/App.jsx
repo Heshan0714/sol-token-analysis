@@ -141,11 +141,11 @@ export default function App() {
               />
               <StatCard
                 label="LIQUIDITY"
-                value={result.market?.found ? fmtUsd(result.market.primary.liquidityUsd) : "—"}
+                value={result.market?.found ? fmtUsd(result.market.totalLiquidityUsd) : "—"}
               />
               <StatCard
                 label="24H VOLUME"
-                value={result.market?.found ? fmtUsd(result.market.primary.volume24h) : "—"}
+                value={result.market?.found ? fmtUsd(result.market.totalVolume24h) : "—"}
               />
               <StatCard
                 label="MARKET CAP"
@@ -158,6 +158,36 @@ export default function App() {
               <StatCard label="LP STATUS" value={lpLabel(result.lpLock)} />
             </div>
           </div>
+
+          {result.market?.found && result.market.pairs?.length > 0 && (
+            <div className="panel">
+              <h2 className="panel__title">
+                TRADING PAIRS {result.market.pairs.length > 1 ? `(${result.market.pairs.length})` : ""}
+              </h2>
+              <div className="pairs-table">
+                <div className="pairs-table__header">
+                  <span>DEX</span>
+                  <span>PRICE</span>
+                  <span>LIQUIDITY</span>
+                  <span>24H VOL</span>
+                </div>
+                {result.market.pairs.map((p) => (
+                  <a
+                    key={p.pairAddress}
+                    className="pairs-table__row"
+                    href={p.url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <span className="pairs-table__dex">{p.dexId}</span>
+                    <span>{fmtPrice(p.priceUsd)}</span>
+                    <span>{fmtUsd(p.liquidityUsd)}</span>
+                    <span>{fmtUsd(p.volume24h)}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="panel">
             <h2 className="panel__title">PRICE HISTORY</h2>
