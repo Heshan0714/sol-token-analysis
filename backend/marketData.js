@@ -27,21 +27,29 @@ async function getDexScreenerData(mintAddress) {
   );
   const primary = sorted[0];
 
+  const allPairs = sorted.map((p) => ({
+    dexId: p.dexId,
+    pairAddress: p.pairAddress,
+    priceUsd: p.priceUsd,
+    priceChange: p.priceChange,
+    liquidityUsd: p.liquidity?.usd || 0,
+    volume24h: p.volume?.h24 || 0,
+    fdv: p.fdv,
+    marketCap: p.marketCap,
+    pairCreatedAt: p.pairCreatedAt,
+    url: p.url,
+  }));
+
+  const totalLiquidityUsd = allPairs.reduce((sum, p) => sum + p.liquidityUsd, 0);
+  const totalVolume24h = allPairs.reduce((sum, p) => sum + p.volume24h, 0);
+
   return {
     found: true,
-    primary: {
-      dexId: primary.dexId,
-      pairAddress: primary.pairAddress,
-      priceUsd: primary.priceUsd,
-      priceChange: primary.priceChange,
-      liquidityUsd: primary.liquidity?.usd || 0,
-      volume24h: primary.volume?.h24 || 0,
-      fdv: primary.fdv,
-      marketCap: primary.marketCap,
-      pairCreatedAt: primary.pairCreatedAt,
-      url: primary.url,
-    },
+    primary: allPairs[0],
+    pairs: allPairs,
     pairCount: pairs.length,
+    totalLiquidityUsd,
+    totalVolume24h,
   };
 }
 
